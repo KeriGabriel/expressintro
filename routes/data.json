@@ -1,0 +1,32 @@
+[
+{
+    "name": "Keri",
+    "age" : 37,
+    "CurrentGame": "GOS"
+},
+{
+    "name": "Uriel",
+    "age" : 36,
+    "CurrentGame": "GOS"
+},
+{
+    "name": "name1",
+    "age": 21,
+    "currentGame": "Call of Duty"
+},
+{
+    "name": "name2",
+    "age": 21,
+    "currentGame": "Call of Duty"
+},
+{
+    "name": "name3",
+    "age": 21,
+    "currentGame": "Call of Duty"
+},
+{
+    "name": "name4",
+    "age": 21,
+    "currentGame": "Call of Duty"
+}
+]
