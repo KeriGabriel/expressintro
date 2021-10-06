@@ -58,7 +58,27 @@ router.patch('/:id',function(req, res){
 //Delete 'D'
 // Delete a resource 
 router.delete('/:id', function(req, res){
-    res.status(200).json({message:'deleted the resource'})
+    //capture the ID
+    var id = req.params.id;
+    
+    //open the file for reading
+    const rawData = fs.readFileSync('routes/data.json');
+    //decode the file (parse) so we can use it
+    var students =JSON.parse(rawData); 
+
+    // if found delete 
+    if (students.length > id){
+    students.splice(id, 1);
+   
+    //(write) the data back to the file
+        const data = fs.writeFileSync('data.json',JSON.stringify(students));
+        res.status(200).json({message: "ok"})
+    }else {
+        res.status(500).json({message: "something went wrong"})
+    }
+    //show success message
+    // if no item found throw error message
+    res.status(200).json(students[id]);
 });
 
 //-------END ROUTES/ENDPOINTS----
