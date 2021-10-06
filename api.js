@@ -24,6 +24,20 @@ catch (err){
 }  
 });
 
+// get one of a resource - Read
+router.get('/:id', function(req, res) {
+    try {
+        const rawdata = fs.readFileSync('routes/data.json'); // <Buffer <hex code>
+        var students = JSON.parse(rawdata);
+    
+        console.log(students[req.params.id]);
+    
+        res.status(200).json(students[req.params.id]);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
 //create 'C'
 //Create a new resourse
 router.post('/',function(req, res){
@@ -35,29 +49,27 @@ router.post('/',function(req, res){
         var students =JSON.parse(rawData); 
 
         // add data, but controlled
+        //var id
         var rawBody =req.body;
 
+        //var newObj = students[id];
         var newObj = {
-            name: null,
+          name: null,
             age: null,
-            currentGame: null
+           currentGame: null
         };
-
         if (rawBody.name != null)
         {
             newObj.name = rawBody.name;
-        }
-        
+        }        
         if (rawBody.age != null)
         {
             newObj.age = rawBody.age;
-        }
-        
+        }        
        if (rawBody.currentGame != null)
        {
-        newObj.currentGame = rawBody.currentGame;
-       }
-       
+            newObj.currentGame = rawBody.currentGame;
+       }      
 
         //get the actual index
         newObj._id = students.length;
@@ -66,10 +78,10 @@ router.post('/',function(req, res){
         students.push(newObj);
 
         //save(write) the data back to the file
-        const data = fs.writeFileSync('data.json',JSON.stringify(students));
+        const data = fs.writeFileSync('routes/data.json',JSON.stringify(students));
 
         //return the data to the user
-         res.status(201).json(students);
+         res.status(201).json(newObj);
     }catch (err){
         res.status(500).json({message: err.message});
     }
@@ -77,14 +89,45 @@ router.post('/',function(req, res){
 });
 
 //update  'U'
-//Update a resource
-router.patch('/:id',function(req, res){
-    res.status(200).json({message:'edited the resource'})
+// updated a resource - Update
+router.patch('/:id', function(req, res) {
+    try {
+        console.log("Object being patched is: ", req.params.id, req.body);
+        // open the file
+        const rawdata = fs.readFileSync('routes/data.json');
+        // decode the file (parse) so we can use it
+        var students = JSON.parse(rawdata);
+
+        // add data, but controlled
+        var id = req.params.id;
+        var rawBody = req.body;
+
+        if (rawBody.name != null) {
+            students[id].name = rawBody.name;
+        }
+        
+        if (rawBody.age != null) {
+            students[id].age = rawBody.age;
+        }
+        
+        if (rawBody.currentGame != null) {
+            students[id].currentGame = rawBody.currentGame;
+        }
+
+        // save (write) the data back to the file
+        const data = fs.writeFileSync('routes/data.json', JSON.stringify(students));
+
+        // return the data to the user
+        res.status(200).json(students[id]);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
 });
 
 //Delete 'D'
 // Delete a resource 
-router.delete('/:id', function(req, res){D
+router.delete('/:id', function(req, res){
+    //capture the id
     var id = req.params.id;
     
     //open the file for reading
@@ -94,22 +137,23 @@ router.delete('/:id', function(req, res){D
 
     // if found delete 
     if (students.length > id){
+        //modify object
     students.splice(id, 1);
    
     //(write) the data back to the file
-        const data = fs.writeFileSync('data.json',JSON.stringify(students));
+        const data = fs.writeFileSync('routes/data.json',JSON.stringify(students));
         res.status(200).json({message: "ok"})
     }else {
         res.status(500).json({message: "something went wrong"})
     }
     //show success message
     // if no item found throw error message
-    res.status(200).json(students[id]);
+   // res.status(200).json(students[id]);
 });
 
 //-------END ROUTES/ENDPOINTS----
 
-module.exports=router;
+module.exports = router;
 
 //get - retrieve an object or website
 //post- creating new objects, posting something/data/site to web server
