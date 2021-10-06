@@ -33,8 +33,35 @@ router.post('/',function(req, res){
         const rawData = fs.readFileSync('routes/data.json');
         //decode the file (parse) so we can use it
         var students =JSON.parse(rawData); 
-        var newObj = req.body;
-        newObj._id = 1;
+
+        // add data, but controlled
+        var rawBody =req.body;
+
+        var newObj = {
+            name: null,
+            age: null,
+            currentGame: null
+        };
+
+        if (rawBody.name != null)
+        {
+            newObj.name = rawBody.name;
+        }
+        
+        if (rawBody.age != null)
+        {
+            newObj.age = rawBody.age;
+        }
+        
+       if (rawBody.currentGame != null)
+       {
+        newObj.currentGame = rawBody.currentGame;
+       }
+       
+
+        //get the actual index
+        newObj._id = students.length;
+
         // add our new object to the array
         students.push(newObj);
 
@@ -57,8 +84,7 @@ router.patch('/:id',function(req, res){
 
 //Delete 'D'
 // Delete a resource 
-router.delete('/:id', function(req, res){
-    //capture the ID
+router.delete('/:id', function(req, res){D
     var id = req.params.id;
     
     //open the file for reading
